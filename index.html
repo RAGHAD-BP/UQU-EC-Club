@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نادي الهندسة والحاسبات بالليث | جامعة أم القرى</title>
+  <meta name="description" content="الموقع الرسمي لنادي الهندسة والحاسبات بالكلية الجامعية بالليث - جامعة أم القرى: فعالياتنا، أخبارنا، ولجاننا." />
+
+  <!-- Google Fonts: Cairo & Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              teal: '#1BA7A5',
+              darkTeal: '#0E6160',
+              ink: '#0B2B2B',
+              gold: '#D9A441',
+              goldDark: '#B88528',
+              goldLight: '#FCF6EA',
+              softBg: '#F4FBFB'
+            }
+          },
+          fontFamily: {
+            sans: ['Cairo', 'Tajawal', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif']
+          },
+          boxShadow: {
+            'teal-sm': '0 2px 8px rgba(27, 167, 165, 0.2)',
+            'teal': '0 8px 24px rgba(27, 167, 165, 0.25)',
+            'gold': '0 8px 24px rgba(217, 164, 65, 0.3)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      background: #F4FBFB;
+      color: #0B2B2B;
+    }
+    ::selection { background: #1BA7A5; color: #fff; }
+
+    /* Signature: circuit-line pattern, referencing "engineering + computing" */
+    .circuit-bg {
+      background-image:
+        radial-gradient(circle at 18% 22%, rgba(27,167,165,0.14) 0, transparent 45%),
+        radial-gradient(circle at 82% 78%, rgba(217,164,65,0.16) 0, transparent 45%),
+        repeating-linear-gradient(90deg, rgba(14,97,96,0.05) 0 1px, transparent 1px 64px),
+        repeating-linear-gradient(0deg, rgba(14,97,96,0.05) 0 1px, transparent 1px 64px);
+    }
+    .node-dot {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #D9A441;
+      box-shadow: 0 0 0 4px rgba(217,164,65,0.18);
+    }
+
+    .section-eyebrow {
+      letter-spacing: 0.08em;
+    }
+
+    .card-hover {
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .fade-up.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute; right: 0; bottom: -4px;
+      width: 0; height: 2px;
+      background: #D9A441;
+      transition: width .25s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    dialog::backdrop {
+      background: rgba(11,43,43,0.55);
+      backdrop-filter: blur(2px);
+    }
+    dialog {
+      border: none;
+      border-radius: 1.25rem;
+      padding: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { transition: none; opacity: 1; transform: none; }
+    }
+
+    :focus-visible {
+      outline: 3px solid #D9A441;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- ===================== NAVBAR ===================== -->
+  <header id="top" class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-brand-teal/10">
+    <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-brand-teal text-white flex items-center justify-center font-black text-sm">EC</div>
+        <div class="leading-tight">
+          <p class="font-extrabold text-brand-darkTeal text-sm md:text-base">نادي الهندسة والحاسبات</p>
+          <p class="text-[11px] text-brand-teal/70">الكلية الجامعية بالليث - جامعة أم القرى</p>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-brand-ink/80">
+        <a href="#about" class="nav-link">من نحن</a>
+        <a href="#events" class="nav-link">الفعاليات</a>
+        <a href="#news" class="nav-link">الأخبار</a>
+        <a href="#committees" class="nav-link">اللجان</a>
+        <a href="#contact" class="nav-link">تواصل معنا</a>
+      </nav>
+     
+      <button id="menu-btn" class="md:hidden text-brand-darkTeal" aria-label="فتح القائمة">
+        <i data-lucide="menu" class="w-7 h-7"></i>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-brand-teal/10 bg-white px-5 py-4 space-y-3 text-sm font-semibold text-brand-ink/80">
+      <a href="#about" class="block">من نحن</a>
+      <a href="#events" class="block">الفعاليات</a>
+      <a href="#news" class="block">الأخبار</a>
+      <a href="#committees" class="block">اللجان</a>
+      <a href="#contact" class="block">تواصل معنا</a>
+      <a href="#join" class="block text-brand-gold">انضم إلينا</a>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="relative overflow-hidden circuit-bg">
+    <span class="node-dot" style="top:18%; right:12%;"></span>
+    <span class="node-dot" style="top:62%; right:26%;"></span>
+    <span class="node-dot" style="top:40%; left:10%;"></span>
+    <div class="max-w-6xl mx-auto px-5 pt-16 pb-20 md:pt-24 md:pb-28 relative">
+      <p class="section-eyebrow inline-flex items-center gap-2 text-xs font-bold text-brand-darkTeal bg-brand-teal/10 px-3 py-1.5 rounded-full mb-6">
+        <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+        الكلية الجامعية بالليث · جامعة أم القرى
+      </p>
+      <h1 class="font-cairo font-black text-4xl md:text-6xl leading-[1.15] text-brand-ink max-w-3xl">
+        نبني بالكود ما نحلم به
+        <span class="text-brand-teal">هندسةً وابتكاراً</span>
+      </h1>
+      <p class="mt-6 text-base md:text-lg text-brand-ink/70 max-w-2xl leading-relaxed">
+        نادي طلابي يجمع المهتمين بالهندسة والحاسبات بالليث، نصمم ورشاً، نطلق مبادرات، ونصنع مساحة نتعلم فيها من بعض ونبني فيها مشاريعنا الأولى.
+      </p>
+      <div class="mt-9 flex flex-wrap gap-4">
+        <a href="#join" class="inline-flex items-center gap-2 bg-brand-teal hover:bg-brand-darkTeal text-white font-bold px-6 py-3.5 rounded-full shadow-teal transition">
+          <i data-lucide="user-plus" class="w-4.5 h-4.5"></i>
+          انضم لعائلة النادي
+        </a>
+        <a href="#events" class="inline-flex items-center gap-2 bg-white hover:bg-brand-goldLight text-brand-darkTeal font-bold px-6 py-3.5 rounded-full border-2 border-brand-teal/20 transition">
+          <i data-lucide="calendar" class="w-4.5 h-4.5"></i>
+          تصفح الفعاليات
+        </a>
+      </div>
+
+      <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
+          <p class="text-3xl font-black text-brand-teal">6</p>
+          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">لجان طلابية</p>
+        </div>
+        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
+          <p class="text-3xl font-black text-brand-teal">+300</p>
+          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">عضو وعضوة</p>
+        </div>
+        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
+          <p class="text-3xl font-black text-brand-teal">+20</p>
+          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">فعالية سنوياً</p>
+        </div>
+        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
+          <p class="text-3xl font-black text-brand-teal">1447هـ</p>
+          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">العام التأسيسي</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" class="max-w-6xl mx-auto px-5 py-20 fade-up">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">من نحن</p>
+        <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink mb-5">مساحة الطلاب لتعلّم ما لا يُعلَّم في القاعة</h2>
+        <p class="text-brand-ink/70 leading-relaxed mb-4">
+          نادي الهندسة والحاسبات بالليث كيان طلابي تابع للكلية الجامعية بالليث - جامعة أم القرى، يهدف إلى صقل مهارات الطلبة التقنية والهندسية عبر ورش عملية، محاضرات متخصصة، ومسابقات برمجية وهندسية تحاكي متطلبات سوق العمل.
+        </p>
+        <p class="text-brand-ink/70 leading-relaxed">
+          نؤمن أن التعلّم الحقيقي يبدأ حين يبني الطالب مشروعه الأول، ويقف أمام جمهوره لأول مرة، ونسعى أن يكون النادي البيئة التي تحتضن هذه البدايات.
+        </p>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm">
+          <i data-lucide="target" class="w-7 h-7 text-brand-teal mb-3"></i>
+          <p class="font-extrabold text-brand-ink mb-1">رسالتنا</p>
+          <p class="text-sm text-brand-ink/60 leading-relaxed">تمكين طلبة الهندسة والحاسبات من مهارات عملية تؤهلهم لسوق العمل ورؤية 2030.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm mt-8">
+          <i data-lucide="rocket" class="w-7 h-7 text-brand-gold mb-3"></i>
+          <p class="font-extrabold text-brand-ink mb-1">رؤيتنا</p>
+          <p class="text-sm text-brand-ink/60 leading-relaxed">أن نكون الحاضنة التقنية الأولى للمبادرات الطلابية في محافظة الليث.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm">
+          <i data-lucide="users" class="w-7 h-7 text-brand-teal mb-3"></i>
+          <p class="font-extrabold text-brand-ink mb-1">مجتمعنا</p>
+          <p class="text-sm text-brand-ink/60 leading-relaxed">طلاب وطالبات من مختلف التخصصات التقنية يجمعهم الفضول والشغف.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm mt-8">
+          <i data-lucide="award" class="w-7 h-7 text-brand-gold mb-3"></i>
+          <p class="font-extrabold text-brand-ink mb-1">إنجازاتنا</p>
+          <p class="text-sm text-brand-ink/60 leading-relaxed">مراكز متقدمة في هاكاثونات جامعة أم القرى ومسابقاتها التقنية.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EVENTS ===================== -->
+  <section id="events" class="bg-white py-20">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="flex items-end justify-between mb-10 fade-up">
+        <div>
+          <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">جدول الأنشطة</p>
+          <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink">فعالياتنا القادمة</h2>
+        </div>
+      </div>
+      <div id="events-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- ===================== NEWS ===================== -->
+  <section id="news" class="py-20 circuit-bg">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="mb-10 fade-up">
+        <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">آخر الأخبار</p>
+        <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink">أخبار وإنجازات النادي</h2>
+      </div>
+      <div id="news-grid" class="grid md:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- ===================== COMMITTEES ===================== -->
+  <section id="committees" class="max-w-6xl mx-auto px-5 py-20">
+    <div class="mb-10 fade-up">
+      <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">هيكلة النادي</p>
+      <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink">لجاننا الطلابية</h2>
+    </div>
+    <div id="committees-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </section>
+
+  <!-- ===================== JOIN US ===================== -->
+  <section id="join" class="max-w-6xl mx-auto px-5 pb-20">
+    <div class="relative overflow-hidden rounded-3xl bg-brand-darkTeal text-white px-6 md:px-14 py-14 md:py-16 text-center fade-up">
+      <div class="absolute -top-10 -left-10 w-56 h-56 bg-brand-teal/40 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-10 -right-10 w-56 h-56 bg-brand-gold/30 rounded-full blur-3xl"></div>
+      <div class="relative">
+        <i data-lucide="sparkles" class="w-9 h-9 text-brand-gold mx-auto mb-5"></i>
+        <h2 class="font-cairo font-black text-2xl md:text-4xl mb-4">ودّك تكون جزءاً من النادي؟</h2>
+        <p class="text-white/75 max-w-xl mx-auto mb-8 leading-relaxed">
+          عبّئ نموذج الانضمام السريع وسيتواصل معك رئيس اللجنة التي اخترتها. فرصتك تبدأ من هنا.
+        </p>
+        <a
+          id="join-form-link"
+          href="https://forms.gle/REPLACE_WITH_YOUR_GOOGLE_FORM_LINK"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-goldDark text-white font-bold px-8 py-4 rounded-full shadow-gold transition text-base"
+        >
+          <i data-lucide="external-link" class="w-4.5 h-4.5"></i>
+          املأ نموذج الانضمام
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer id="contact" class="bg-brand-ink text-white/70">
+    <div class="max-w-6xl mx-auto px-5 py-14 grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+      <div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-9 h-9 rounded-xl bg-brand-teal text-white flex items-center justify-center font-black text-sm">EC</div>
+          <p class="font-extrabold text-white text-sm">نادي الهندسة والحاسبات</p>
+        </div>
+        <p class="text-xs leading-relaxed">الكلية الجامعية بالليث - جامعة أم القرى</p>
+      </div>
+      <div>
+        <p class="font-bold text-white mb-4 text-sm">روابط سريعة</p>
+        <ul class="space-y-2.5 text-xs">
+          <li><a href="#about" class="hover:text-brand-gold transition">من نحن</a></li>
+          <li><a href="#events" class="hover:text-brand-gold transition">الفعاليات</a></li>
+          <li><a href="#news" class="hover:text-brand-gold transition">الأخبار</a></li>
+          <li><a href="#join" class="hover:text-brand-gold transition">انضم إلينا</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-bold text-white mb-4 text-sm">تواصل معنا</p>
+        <ul class="space-y-2.5 text-xs">
+          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5"></i> ce.club.leith@uqu.edu.sa</li>
+          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> الكلية الجامعية بالليث</li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-bold text-white mb-4 text-sm">تابعنا</p>
+        <div class="flex items-center gap-3">
+          <a href="#" class="w-9 h-9 rounded-full bg-white/10 hover:bg-brand-teal flex items-center justify-center transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-5 text-center text-[11px]">
+      © <span id="year"></span> نادي الهندسة والحاسبات بالليث - جامعة أم القرى. جميع الحقوق محفوظة.
+    </div>
+  </footer>
+
+  <!-- ===================== DETAIL MODAL (view-only) ===================== -->
+  <dialog id="detail-modal" class="w-[92%] max-w-lg">
+    <div class="bg-white rounded-[1.25rem] overflow-hidden">
+      <div class="relative">
+        <img id="modal-image" src="" alt="" class="w-full h-48 object-cover" />
+        <button id="modal-close" class="absolute top-3 left-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center" aria-label="إغلاق">
+          <i data-lucide="x" class="w-5 h-5 text-brand-ink"></i>
+        </button>
+      </div>
+      <div class="p-6">
+        <p id="modal-badge" class="inline-block text-[11px] font-bold text-brand-darkTeal bg-brand-teal/10 px-3 py-1 rounded-full mb-3"></p>
+        <h3 id="modal-title" class="font-cairo font-black text-xl text-brand-ink mb-3"></h3>
+        <p id="modal-body" class="text-sm text-brand-ink/70 leading-relaxed mb-4"></p>
+        <div id="modal-meta" class="space-y-2 text-sm text-brand-ink/70"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>

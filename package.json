@@ -1,0 +1,13 @@
+{
+  "name": "uqu-ce-club",
+  "private": true,
+  "version": "2.0.0",
+  "description": "الموقع الرسمي لنادي الهندسة والحاسبات بالليث - جامعة أم القرى (موقع عرض فقط)",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
