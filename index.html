@@ -1,365 +1,571 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نادي الهندسة والحاسبات بالليث | جامعة أم القرى</title>
-  <meta name="description" content="الموقع الرسمي لنادي الهندسة والحاسبات بالكلية الجامعية بالليث - جامعة أم القرى: فعالياتنا، أخبارنا، ولجاننا." />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نادي الهندسة والحاسبات بالليث | جامعة أم القرى</title>
+    <meta name="description" content="البوابة الرسمية لنادي الهندسة والحاسبات بالكلية الجامعية بالليث - جامعة أم القرى" />
+    
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- Google Fonts: Cairo & Tajawal -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              teal: '#1BA7A5',
-              darkTeal: '#0E6160',
-              ink: '#0B2B2B',
-              gold: '#D9A441',
-              goldDark: '#B88528',
-              goldLight: '#FCF6EA',
-              softBg: '#F4FBFB'
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                teal: '#1BA7A5',
+                darkTeal: '#0E6160',
+                gold: '#D9A441',
+                goldDark: '#B88528',
+                goldLight: '#FCF6EA',
+                softBg: '#F4FBFB'
+              }
+            },
+            fontFamily: {
+              sans: ['Cairo', 'Tajawal', 'sans-serif'],
+              cairo: ['Cairo', 'sans-serif'],
+              tajawal: ['Tajawal', 'sans-serif']
+            },
+            boxShadow: {
+              'teal-sm': '0 2px 8px rgba(27, 167, 165, 0.2)',
+              'teal': '0 4px 14px rgba(27, 167, 165, 0.3)',
+              'gold-sm': '0 2px 8px rgba(217, 164, 65, 0.25)',
+              'gold': '0 4px 14px rgba(217, 164, 65, 0.35)'
             }
-          },
-          fontFamily: {
-            sans: ['Cairo', 'Tajawal', 'sans-serif'],
-            cairo: ['Cairo', 'sans-serif'],
-            tajawal: ['Tajawal', 'sans-serif']
-          },
-          boxShadow: {
-            'teal-sm': '0 2px 8px rgba(27, 167, 165, 0.2)',
-            'teal': '0 8px 24px rgba(27, 167, 165, 0.25)',
-            'gold': '0 8px 24px rgba(217, 164, 65, 0.3)'
           }
         }
       }
-    }
-  </script>
+    </script>
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- SheetJS (xlsx) for client-side Excel handling -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-  <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      background: #F4FBFB;
-      color: #0B2B2B;
-    }
-    ::selection { background: #1BA7A5; color: #fff; }
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-    /* Signature: circuit-line pattern, referencing "engineering + computing" */
-    .circuit-bg {
-      background-image:
-        radial-gradient(circle at 18% 22%, rgba(27,167,165,0.14) 0, transparent 45%),
-        radial-gradient(circle at 82% 78%, rgba(217,164,65,0.16) 0, transparent 45%),
-        repeating-linear-gradient(90deg, rgba(14,97,96,0.05) 0 1px, transparent 1px 64px),
-        repeating-linear-gradient(0deg, rgba(14,97,96,0.05) 0 1px, transparent 1px 64px);
-    }
-    .node-dot {
-      position: absolute;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #D9A441;
-      box-shadow: 0 0 0 4px rgba(217,164,65,0.18);
-    }
+    <style>
+      body {
+        font-family: 'Cairo', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Prevent iOS font size auto-zoom on input focus */
+      @media screen and (max-width: 768px) {
+        input, select, textarea {
+          font-size: 16px !important;
+        }
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.25s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      /* Touch-friendly horizontal scroll bars */
+      .custom-touch-scroll {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+      }
+      /* Safe area support for notched phones */
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 1rem);
+      }
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        #printable-certificate, #printable-certificate * {
+          visibility: visible;
+        }
+        #printable-certificate {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          border: 4px solid #D9A441 !important;
+          box-shadow: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-[#F8FCFC] text-slate-900 selection:bg-[#1BA7A5] selection:text-white min-h-screen flex flex-col antialiased pb-20 md:pb-0">
 
-    .section-eyebrow {
-      letter-spacing: 0.08em;
-    }
-
-    .card-hover {
-      transition: transform .35s ease, box-shadow .35s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-6px);
-    }
-
-    .fade-up {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .fade-up.in-view {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .nav-link { position: relative; }
-    .nav-link::after {
-      content: '';
-      position: absolute; right: 0; bottom: -4px;
-      width: 0; height: 2px;
-      background: #D9A441;
-      transition: width .25s ease;
-    }
-    .nav-link:hover::after { width: 100%; }
-
-    dialog::backdrop {
-      background: rgba(11,43,43,0.55);
-      backdrop-filter: blur(2px);
-    }
-    dialog {
-      border: none;
-      border-radius: 1.25rem;
-      padding: 0;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .fade-up { transition: none; opacity: 1; transform: none; }
-    }
-
-    :focus-visible {
-      outline: 3px solid #D9A441;
-      outline-offset: 2px;
-    }
-  </style>
-</head>
-<body class="antialiased">
-
-  <!-- ===================== NAVBAR ===================== -->
-  <header id="top" class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-brand-teal/10">
-    <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-      <a href="#top" class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-brand-teal text-white flex items-center justify-center font-black text-sm">EC</div>
-        <div class="leading-tight">
-          <p class="font-extrabold text-brand-darkTeal text-sm md:text-base">نادي كلية الهندسة والحاسبات</p>
-          <p class="text-[11px] text-brand-teal/70">كلية الهندسة والحاسبات بالليث - جامعة أم القرى</p>
+    <!-- Top University Micro Header -->
+    <div class="bg-[#0E6160] text-white py-1.5 px-3 sm:px-4 text-xs font-semibold select-none border-b border-[#1BA7A5]/40">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <span class="inline-block w-2.5 h-2.5 bg-[#D9A441] rounded-full border border-white/60 animate-pulse"></span>
+          <span class="font-bold text-[#FAECCF]">جامعة أم القرى</span>
+          <span class="text-[#1BA7A5]/60">•</span>
+          <span class="text-slate-100 truncate max-w-[140px] sm:max-w-none">الكلية الجامعية بالليث</span>
         </div>
-      </a>
-      <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-brand-ink/80">
-        <a href="#about" class="nav-link">من نحن</a>
-        <a href="#events" class="nav-link">الفعاليات</a>
-        <a href="#news" class="nav-link">الأخبار</a>
-        <a href="#committees" class="nav-link">اللجان</a>
-        <a href="#contact" class="nav-link">تواصل معنا</a>
-      </nav>
-     
-      <button id="menu-btn" class="md:hidden text-brand-darkTeal" aria-label="فتح القائمة">
-        <i data-lucide="menu" class="w-7 h-7"></i>
-      </button>
-    </div>
-    <div id="mobile-menu" class="hidden md:hidden border-t border-brand-teal/10 bg-white px-5 py-4 space-y-3 text-sm font-semibold text-brand-ink/80">
-      <a href="#about" class="block">من نحن</a>
-      <a href="#events" class="block">الفعاليات</a>
-      <a href="#news" class="block">الأخبار</a>
-      <a href="#committees" class="block">اللجان</a>
-      <a href="#contact" class="block">تواصل معنا</a>
-      <a href="#join" class="block text-brand-gold">انضم إلينا</a>
-    </div>
-  </header>
-
-  <!-- ===================== HERO ===================== -->
-  <section class="relative overflow-hidden circuit-bg">
-    <span class="node-dot" style="top:18%; right:12%;"></span>
-    <span class="node-dot" style="top:62%; right:26%;"></span>
-    <span class="node-dot" style="top:40%; left:10%;"></span>
-    <div class="max-w-6xl mx-auto px-5 pt-16 pb-20 md:pt-24 md:pb-28 relative">
-      <p class="section-eyebrow inline-flex items-center gap-2 text-xs font-bold text-brand-darkTeal bg-brand-teal/10 px-3 py-1.5 rounded-full mb-6">
-        <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-        كلية الهندسة والحاسبات بالليث · جامعة أم القرى
-      </p>
-      <h1 class="font-cairo font-black text-4xl md:text-6xl leading-[1.15] text-brand-ink max-w-3xl">
-        نبني بالكود ما نحلم به
-        <span class="text-brand-teal">هندسةً وابتكاراً</span>
-      </h1>
-      <p class="mt-6 text-base md:text-lg text-brand-ink/70 max-w-2xl leading-relaxed">
-        نادي طلابي يجمع المهتمين بالهندسة والحاسبات بالليث، نصمم ورشاً، نطلق مبادرات، ونصنع مساحة نتعلم فيها من بعض ونبني فيها مشاريعنا الأولى.
-      </p>
-      <div class="mt-9 flex flex-wrap gap-4">
-        <a href="#join" class="inline-flex items-center gap-2 bg-brand-teal hover:bg-brand-darkTeal text-white font-bold px-6 py-3.5 rounded-full shadow-teal transition">
-          <i data-lucide="user-plus" class="w-4.5 h-4.5"></i>
-          انضم لعائلة النادي
-        </a>
-        <a href="#events" class="inline-flex items-center gap-2 bg-white hover:bg-brand-goldLight text-brand-darkTeal font-bold px-6 py-3.5 rounded-full border-2 border-brand-teal/20 transition">
-          <i data-lucide="calendar" class="w-4.5 h-4.5"></i>
-          تصفح الفعاليات
-        </a>
-      </div>
-
-      <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
-          <p class="text-3xl font-black text-brand-teal">3</p>
-          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">لجان طلابية</p>
-        </div>
-        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
-          <p class="text-3xl font-black text-brand-teal">+80</p>
-          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">عضو وعضوة</p>
-        </div>
-        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
-          <p class="text-3xl font-black text-brand-teal">+20</p>
-          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">فعالية سنوياً</p>
-        </div>
-        <div class="bg-white/70 backdrop-blur rounded-2xl p-5 border border-brand-teal/10">
-          <p class="text-3xl font-black text-brand-teal">1446هـ</p>
-          <p class="text-xs text-brand-ink/60 mt-1 font-semibold">العام التأسيسي</p>
+        <div class="flex items-center gap-2 sm:gap-3 text-slate-200 text-[11px] sm:text-xs">
+          <span class="hidden sm:inline font-bold">نادي الهندسة والحاسبات</span>
+          <span class="hidden sm:inline text-[#1BA7A5]/60">|</span>
+          <span class="text-[#FAECCF] font-mono font-bold">1448هـ / 2026م</span>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- ===================== ABOUT ===================== -->
-  <section id="about" class="max-w-6xl mx-auto px-5 py-20 fade-up">
-    <div class="grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">من نحن</p>
-        <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink mb-5">مساحة الطلاب لتعلّم ما لا يُعلَّم في القاعة</h2>
-        <p class="text-brand-ink/70 leading-relaxed mb-4">
-          نادي الهندسة والحاسبات بالليث كيان طلابي تابع للكلية الجامعية بالليث - جامعة أم القرى، يهدف إلى صقل مهارات الطلبة التقنية والهندسية عبر ورش عملية، محاضرات متخصصة، ومسابقات برمجية وهندسية تحاكي متطلبات سوق العمل.
-        </p>
-        <p class="text-brand-ink/70 leading-relaxed">
-          نؤمن أن التعلّم الحقيقي يبدأ حين يبني الطالب مشروعه الأول، ويقف أمام جمهوره لأول مرة، ونسعى أن يكون النادي البيئة التي تحتضن هذه البدايات.
-        </p>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm">
-          <i data-lucide="target" class="w-7 h-7 text-brand-teal mb-3"></i>
-          <p class="font-extrabold text-brand-ink mb-1">رسالتنا</p>
-          <p class="text-sm text-brand-ink/60 leading-relaxed">تمكين طلبة الهندسة والحاسبات من مهارات عملية تؤهلهم لسوق العمل ورؤية 2030.</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm mt-8">
-          <i data-lucide="rocket" class="w-7 h-7 text-brand-gold mb-3"></i>
-          <p class="font-extrabold text-brand-ink mb-1">رؤيتنا</p>
-          <p class="text-sm text-brand-ink/60 leading-relaxed">أن نكون الحاضنة التقنية الأولى للمبادرات الطلابية في محافظة الليث.</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm">
-          <i data-lucide="users" class="w-7 h-7 text-brand-teal mb-3"></i>
-          <p class="font-extrabold text-brand-ink mb-1">مجتمعنا</p>
-          <p class="text-sm text-brand-ink/60 leading-relaxed">طلاب وطالبات من مختلف التخصصات  يجمعهم الفضول والشغف.</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 border border-brand-teal/10 shadow-sm mt-8">
-          <i data-lucide="award" class="w-7 h-7 text-brand-gold mb-3"></i>
-          <p class="font-extrabold text-brand-ink mb-1">إنجازاتنا</p>
-          <p class="text-sm text-brand-ink/60 leading-relaxed">مراكز متقدمة في هاكاثونات جامعة أم القرى ومسابقاتها التقنية.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- Main Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white border-b-2 border-[#1BA7A5] shadow-sm">
+      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 sm:h-20">
+          
+          <!-- Logo & Brand Title -->
+          <div onclick="switchTab('home')" class="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer group select-none min-h-[44px]">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1BA7A5] border-2 border-[#D9A441] flex items-center justify-center shadow-gold-sm group-hover:scale-105 transition-all">
+              <span class="text-white font-black text-xl sm:text-2xl font-mono tracking-tighter">CE</span>
+            </div>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <h1 class="font-black text-sm sm:text-base md:text-lg text-[#0E6160] group-hover:text-[#1BA7A5] transition-colors tracking-tight">
+                  نادي الهندسة والحاسبات
+                </h1>
+                <span class="bg-[#FCF6EA] text-[#B88528] text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-md font-black border border-[#D9A441]">
+                  بالليث
+                </span>
+              </div>
+              <p class="text-[10px] sm:text-[11px] font-semibold text-[#1BA7A5] hidden xs:block">
+                جامعة أم القرى • Umm Al-Qura University
+              </p>
+            </div>
+          </div>
 
-  <!-- ===================== EVENTS ===================== -->
-  <section id="events" class="bg-white py-20">
-    <div class="max-w-6xl mx-auto px-5">
-      <div class="flex items-end justify-between mb-10 fade-up">
-        <div>
-          <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">جدول الأنشطة</p>
-          <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink">فعالياتنا القادمة</h2>
-        </div>
-      </div>
-      <div id="events-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </div>
-  </section>
+          <!-- Desktop Navigation Items -->
+          <nav class="hidden lg:flex items-center gap-1.5" id="desktop-nav">
+            <button onclick="switchTab('home')" data-tab="home" class="nav-btn flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all bg-[#1BA7A5] text-white border-2 border-[#0E6160] shadow-teal-sm min-h-[44px]">
+              <i data-lucide="sparkles" class="w-4 h-4 text-[#FCF6EA]"></i>
+              <span>الرئيسية</span>
+            </button>
+            <button onclick="switchTab('events')" data-tab="events" class="nav-btn flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-800 hover:bg-[#E8F8F8] border-2 border-transparent min-h-[44px]">
+              <i data-lucide="calendar" class="w-4 h-4 text-[#1BA7A5]"></i>
+              <span>الفعاليات والورش</span>
+              <span id="nav-events-badge" class="bg-red-50 text-red-700 font-black text-[10px] px-1.5 py-0.5 rounded border border-red-200">مغلق حالياً</span>
+            </button>
+            <button onclick="switchTab('committees')" data-tab="committees" class="nav-btn flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-800 hover:bg-[#E8F8F8] border-2 border-transparent min-h-[44px]">
+              <i data-lucide="users" class="w-4 h-4 text-[#1BA7A5]"></i>
+              <span>لجان النادي</span>
+            </button>
+            <button onclick="switchTab('news')" data-tab="news" class="nav-btn flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-800 hover:bg-[#E8F8F8] border-2 border-transparent min-h-[44px]">
+              <i data-lucide="bell" class="w-4 h-4 text-[#1BA7A5]"></i>
+              <span>الأخبار والإعلانات</span>
+            </button>
+          </nav>
 
-  <!-- ===================== NEWS ===================== -->
-  <section id="news" class="py-20 circuit-bg">
-    <div class="max-w-6xl mx-auto px-5">
-      <div class="mb-10 fade-up">
-        <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">آخر الأخبار</p>
-        <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink">أخبار وإنجازات النادي</h2>
-      </div>
-      <div id="news-grid" class="grid md:grid-cols-3 gap-6"></div>
-    </div>
-  </section>
+          <!-- Right Action: Microsoft Forms Join & Mobile Menu Toggle -->
+          <div class="flex items-center gap-2">
+            <a href="https://forms.office.com/r/CEClubJoin" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 sm:gap-2 bg-[#FCF6EA] hover:bg-[#D9A441] hover:text-white text-[#0E6160] border-2 border-[#D9A441] text-xs font-black px-3 sm:px-4 py-2 rounded-xl shadow-gold-sm transition-all min-h-[40px]">
+              <i data-lucide="external-link" class="w-4 h-4 text-[#D9A441] group-hover:text-white"></i>
+              <span class="hidden sm:inline">انضم للنادي (Microsoft Forms)</span>
+              <span class="sm:hidden text-[11px]">انضمام (فورم)</span>
+            </a>
 
-  <!-- ===================== COMMITTEES ===================== -->
-  <section id="committees" class="max-w-6xl mx-auto px-5 py-20">
-    <div class="mb-10 fade-up">
-      <p class="section-eyebrow text-xs font-bold text-brand-gold mb-3">هيكلة النادي</p>
-      <h2 class="font-cairo font-black text-3xl md:text-4xl text-brand-ink">لجاننا الطلابية</h2>
-    </div>
-    <div id="committees-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-  </section>
-
-  <!-- ===================== JOIN US ===================== -->
-  <section id="join" class="max-w-6xl mx-auto px-5 pb-20">
-    <div class="relative overflow-hidden rounded-3xl bg-brand-darkTeal text-white px-6 md:px-14 py-14 md:py-16 text-center fade-up">
-      <div class="absolute -top-10 -left-10 w-56 h-56 bg-brand-teal/40 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-10 -right-10 w-56 h-56 bg-brand-gold/30 rounded-full blur-3xl"></div>
-      <div class="relative">
-        <i data-lucide="sparkles" class="w-9 h-9 text-brand-gold mx-auto mb-5"></i>
-        <h2 class="font-cairo font-black text-2xl md:text-4xl mb-4">ودّك تكون جزءاً من النادي؟</h2>
-        <p class="text-white/75 max-w-xl mx-auto mb-8 leading-relaxed">
-          عبّئ نموذج الانضمام السريع وسيتواصل معك رئيس اللجنة التي اخترتها. فرصتك تبدأ من هنا.
-        </p>
-        <a
-          id="join-form-link"
-          href="https://forms.gle/REPLACE_WITH_YOUR_GOOGLE_FORM_LINK"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-goldDark text-white font-bold px-8 py-4 rounded-full shadow-gold transition text-base"
-        >
-          <i data-lucide="external-link" class="w-4.5 h-4.5"></i>
-          املأ نموذج الانضمام
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== FOOTER ===================== -->
-  <footer id="contact" class="bg-brand-ink text-white/70">
-    <div class="max-w-6xl mx-auto px-5 py-14 grid sm:grid-cols-2 md:grid-cols-4 gap-10">
-      <div>
-        <div class="flex items-center gap-2.5 mb-4">
-          <div class="w-9 h-9 rounded-xl bg-brand-teal text-white flex items-center justify-center font-black text-sm">EC</div>
-          <p class="font-extrabold text-white text-sm">نادي كلية الهندسة والحاسبات</p>
-        </div>
-        <p class="text-xs leading-relaxed">كلية الهندسة والحاسبات بالليث - جامعة أم القرى</p>
-      </div>
-      <div>
-        <p class="font-bold text-white mb-4 text-sm">روابط سريعة</p>
-        <ul class="space-y-2.5 text-xs">
-          <li><a href="#about" class="hover:text-brand-gold transition">من نحن</a></li>
-          <li><a href="#events" class="hover:text-brand-gold transition">الفعاليات</a></li>
-          <li><a href="#news" class="hover:text-brand-gold transition">الأخبار</a></li>
-          <li><a href="#join" class="hover:text-brand-gold transition">انضم إلينا</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="font-bold text-white mb-4 text-sm">تواصل معنا</p>
-        <ul class="space-y-2.5 text-xs">
-          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5"></i> ce.club.leith@uqu.edu.sa</li>
-          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> كلية الهندسة والحاسبات بالليث</li>
-        </ul>
-      </div>
-      <div>
-        <p class="font-bold text-white mb-4 text-sm">تابعنا</p>
-        <div class="flex items-center gap-3">
-          <a href="#" class="w-9 h-9 rounded-full bg-white/10 hover:bg-brand-teal flex items-center justify-center transition"><i data-lucide="twitter" class="w-4 h-4"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="w-4 h-4">
-    <path d="M0 0h24v24H0z" fill="none" />
-    <path fill="#fff" d="M13.68 10.62L20.24 3h-1.55L13 9.62L8.45 3H3.19l6.88 10.01L3.19 21h1.55l6.01-6.99l4.8 6.99h5.24l-7.13-10.38Zm-2.13 2.47l-.7-1l-5.54-7.93H7.7l4.47 6.4l.7 1l5.82 8.32H16.3z" />
-  </svg></i></a>
+            <!-- Mobile Drawer Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl border-2 border-[#1BA7A5] bg-white text-[#1BA7A5] hover:bg-[#E8F8F8] min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="القائمة">
+              <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="border-t border-white/10 py-5 text-center text-[11px]">
-      © <span id="year"></span> نادي الهندسة والحاسبات بالليث - جامعة أم القرى. جميع الحقوق محفوظة.
-    </div>
-  </footer>
 
-  <!-- ===================== DETAIL MODAL (view-only) ===================== -->
-  <dialog id="detail-modal" class="w-[92%] max-w-lg">
-    <div class="bg-white rounded-[1.25rem] overflow-hidden">
-      <div class="relative">
-        <img id="modal-image" src="" alt="" class="w-full h-48 object-cover" />
-        <button id="modal-close" class="absolute top-3 left-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center" aria-label="إغلاق">
-          <i data-lucide="x" class="w-5 h-5 text-brand-ink"></i>
+      <!-- Mobile Dropdown / Slide Menu with backdrop -->
+      <div id="mobile-menu-backdrop" onclick="toggleMobileMenu()" class="hidden fixed inset-0 bg-slate-900/50 z-40 backdrop-blur-xs lg:hidden transition-opacity"></div>
+      <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 right-0 bg-white border-b-2 border-[#1BA7A5] px-4 pt-3 pb-6 space-y-2 shadow-xl z-50 animate-fadeIn">
+        <button onclick="switchTab('home'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-black bg-[#1BA7A5] text-white min-h-[44px]">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+          <span>الرئيسية</span>
         </button>
+        <button onclick="switchTab('events'); toggleMobileMenu();" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-black text-slate-900 hover:bg-[#E8F8F8] min-h-[44px]">
+          <div class="flex items-center gap-3"><i data-lucide="calendar" class="w-5 h-5 text-[#1BA7A5]"></i><span>الفعاليات والورش</span></div>
+          <span class="bg-red-50 text-red-700 text-xs px-2 py-0.5 rounded border border-red-200">مغلق حالياً</span>
+        </button>
+        <button onclick="switchTab('committees'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-black text-slate-900 hover:bg-[#E8F8F8] min-h-[44px]">
+          <i data-lucide="users" class="w-5 h-5 text-[#1BA7A5]"></i>
+          <span>لجان النادي</span>
+        </button>
+        <button onclick="switchTab('news'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-black text-slate-900 hover:bg-[#E8F8F8] min-h-[44px]">
+          <i data-lucide="bell" class="w-5 h-5 text-[#1BA7A5]"></i>
+          <span>الأخبار والإعلانات</span>
+        </button>
+        <a href="https://forms.office.com/r/CEClubJoin" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-black bg-[#D9A441] text-white min-h-[44px]">
+          <div class="flex items-center gap-3"><i data-lucide="external-link" class="w-5 h-5"></i><span>طلب الانضمام كعضو (Microsoft Forms)</span></div>
+          <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+        </a>
       </div>
-      <div class="p-6">
-        <p id="modal-badge" class="inline-block text-[11px] font-bold text-brand-darkTeal bg-brand-teal/10 px-3 py-1 rounded-full mb-3"></p>
-        <h3 id="modal-title" class="font-cairo font-black text-xl text-brand-ink mb-3"></h3>
-        <p id="modal-body" class="text-sm text-brand-ink/70 leading-relaxed mb-4"></p>
-        <div id="modal-meta" class="space-y-2 text-sm text-brand-ink/70"></div>
+    </header>
+
+    <!-- MAIN BODY SECTIONS -->
+    <main class="flex-1">
+
+      <!-- ================= SECTION: HOME ================= -->
+      <section id="tab-home" class="tab-content active">
+        
+        <!-- Hero Section -->
+        <div class="relative bg-gradient-to-b from-[#E8F8F8] to-white border-b-2 border-[#1BA7A5]/30 pt-10 pb-14 px-4 sm:px-6 lg:px-8 overflow-hidden">
+          <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              
+              <!-- Left / Main Text Column -->
+              <div class="lg:col-span-7 space-y-6 text-right">
+                <div class="inline-flex items-center gap-2 bg-[#FCF6EA] text-[#0E6160] px-3.5 py-1.5 rounded-xl border-2 border-[#D9A441] shadow-gold-sm text-xs font-black">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-[#D9A441]"></i>
+                  <span>بوابة الأنشطة والتدريب الطلابي المعتمدة</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0E6160] leading-tight">
+                  نادي الهندسة والحاسبات <br>
+                  <span class="text-[#1BA7A5]">بالكلية الجامعية بالليث</span>
+                </h1>
+
+                <p class="text-sm sm:text-base text-slate-700 font-semibold leading-relaxed max-w-2xl">
+                  البوابة الرسمية لنادي الهندسة والحاسبات بالكلية الجامعية بالليث - جامعة أم القرى. ملتقى المبدعين في التقنية، البرمجة، والذكاء الاصطناعي، لتطوير المهارات والمشاركة في الهاكاثونات والمحافل الوطنية.
+                </p>
+
+                <!-- Hero Action Buttons -->
+                <div class="flex flex-wrap items-center gap-3 pt-2">
+                  <a href="https://forms.office.com/r/CEClubJoin" target="_blank" rel="noopener noreferrer" class="bg-[#D9A441] hover:bg-[#B88528] text-white font-black text-xs sm:text-sm px-6 py-3.5 rounded-xl border-2 border-[#B88528] shadow-gold hover:scale-[1.02] transition-all flex items-center gap-2">
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                    <span>طلب الانضمام كعضو بالنادي (Microsoft Forms)</span>
+                  </a>
+                  <button onclick="switchTab('events')" class="bg-[#1BA7A5] hover:bg-[#0E6160] text-white font-black text-xs sm:text-sm px-6 py-3.5 rounded-xl border-2 border-[#0E6160] shadow-teal hover:scale-[1.02] transition-all flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span>استعراض الفعاليات والورش</span>
+                  </button>
+                  <button onclick="switchTab('committees')" class="bg-white hover:bg-[#FCF6EA] text-[#0E6160] font-black text-xs sm:text-sm px-5 py-3.5 rounded-xl border-2 border-[#D9A441] transition-all flex items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4 text-[#D9A441]"></i>
+                    <span>لجان النادي وفرص التطوع</span>
+                  </button>
+                </div>
+
+                <!-- Stats Counters Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6">
+                  <div class="bg-white p-4 rounded-xl border-2 border-[#1BA7A5]/40 shadow-sm text-center">
+                    <div id="stat-members" class="text-2xl font-black text-[#0E6160]">320+</div>
+                    <div class="text-[11px] font-bold text-slate-600">عضو فعال بالنادي</div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl border-2 border-[#1BA7A5]/40 shadow-sm text-center">
+                    <div id="stat-workshops" class="text-2xl font-black text-[#1BA7A5]">12+</div>
+                    <div class="text-[11px] font-bold text-slate-600">ورشة ومخيم تقني</div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl border-2 border-[#D9A441]/50 shadow-sm text-center bg-[#FCF6EA]/40">
+                    <div id="stat-attendees" class="text-2xl font-black text-[#B88528]">450+</div>
+                    <div class="text-[11px] font-bold text-slate-700">مستفيد من البرامج</div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl border-2 border-[#1BA7A5]/40 shadow-sm text-center">
+                    <div id="stat-projects" class="text-2xl font-black text-[#0E6160]">18+</div>
+                    <div class="text-[11px] font-bold text-slate-600">مشروع وابتكار</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Image / Feature Card Column -->
+              <div class="lg:col-span-5 space-y-4">
+                <div class="relative rounded-2xl overflow-hidden border-2 border-[#1BA7A5] shadow-teal bg-white p-2">
+                  <img 
+                    src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80" 
+                    alt="فعاليات نادي الهندسة والحاسبات بالليث" 
+                    class="w-full h-64 object-cover rounded-xl"
+                  />
+                  <div class="p-4 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <span class="bg-[#FCF6EA] text-[#B88528] text-xs px-2.5 py-1 rounded-md font-black border border-[#D9A441]">
+                        الورشة المميزة القادمة
+                      </span>
+                      <span class="text-xs font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-200">التسجيل مغلق حالياً</span>
+                    </div>
+                    <h3 class="font-black text-sm text-[#0E6160]">
+                      مخيم تطوير تطبيقات الويب الحديثة والحوسبة السحابية
+                    </h3>
+                    <p class="text-xs text-slate-600 font-semibold line-clamp-2">
+                      تدريب عملي متقدم لطلبة الليث لبناء المشاريع البرمجية المتكاملة مع شهادات معتمدة.
+                    </p>
+                    <button onclick="switchTab('events')" class="w-full mt-2 bg-[#1BA7A5] hover:bg-[#0E6160] text-white font-black text-xs py-2.5 rounded-lg transition-all flex items-center justify-center gap-1.5">
+                      <span>استعراض الورشة وتفاصيلها</span>
+                      <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Home Events Preview Section -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-slate-200 pb-4">
+            <div>
+              <div class="flex items-center gap-2 text-xs font-black text-[#1BA7A5]">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                <span>الأجندة والأنشطة</span>
+              </div>
+              <h2 class="text-2xl font-black text-[#0E6160]">الفعاليات والورش القادمة</h2>
+            </div>
+            <button onclick="switchTab('events')" class="self-start sm:self-auto text-xs font-black text-[#1BA7A5] hover:text-[#0E6160] flex items-center gap-1">
+              <span>عرض كافة الفعاليات</span>
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <div id="home-events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Quick News Preview in Home -->
+        <div class="bg-[#F4FBFB] border-t-2 border-b-2 border-[#1BA7A5]/20 py-12 px-4 sm:px-6 lg:px-8">
+          <div class="max-w-7xl mx-auto space-y-8">
+            <div class="flex items-center justify-between border-b-2 border-[#1BA7A5]/30 pb-4">
+              <div>
+                <div class="flex items-center gap-2 text-xs font-black text-[#D9A441]">
+                  <i data-lucide="bell" class="w-4 h-4"></i>
+                  <span>أحدث المستجدات</span>
+                </div>
+                <h2 class="text-2xl font-black text-[#0E6160]">أخبار وإنجازات النادي</h2>
+              </div>
+              <button onclick="switchTab('news')" class="text-xs font-black text-[#1BA7A5] hover:text-[#0E6160] flex items-center gap-1">
+                <span>تصفح كل الأخبار</span>
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <div id="home-news-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Populated via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= SECTION: EVENTS & REGISTRATION ================= -->
+      <section id="tab-events" class="tab-content">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+          
+          <!-- Header & Filters -->
+          <div class="bg-white p-6 rounded-2xl border-2 border-[#1BA7A5] shadow-teal-sm space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2 text-xs font-black text-[#1BA7A5] mb-1">
+                  <i data-lucide="calendar" class="w-4 h-4"></i>
+                  <span>البرامج والورش التقنية</span>
+                </div>
+                <h2 class="text-2xl font-black text-[#0E6160]">برامج وفعاليات النادي</h2>
+                <p class="text-xs font-semibold text-slate-600 mt-1">يتم التسجيل في فعاليات وورش النادي حصرياً عبر نماذج Microsoft Forms المعتمدة</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="relative w-full sm:w-64">
+                  <input 
+                    type="text" 
+                    id="events-search-input" 
+                    oninput="filterEvents()" 
+                    placeholder="ابحث عن ورشة، محاضر..." 
+                    class="w-full text-xs font-semibold px-3.5 py-2.5 pr-9 rounded-xl border-2 border-slate-300 focus:border-[#1BA7A5] focus:outline-none"
+                  />
+                  <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute right-3 top-3"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Notice Banner -->
+            <div class="bg-[#FCF6EA] border border-[#D9A441] p-3.5 rounded-xl flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2 text-xs font-bold text-[#0E6160]">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                <span>حالة التسجيل في الفعاليات والورش: <strong class="text-red-700">مغلق حالياً</strong>. عند فتح التسجيل سيظهر زر مباشر ينقلك لفورم مايكروسوفت (Microsoft Forms).</span>
+              </div>
+              <a href="https://forms.office.com/r/CEClubJoin" target="_blank" rel="noopener noreferrer" class="text-xs font-black text-[#0E6160] hover:text-[#D9A441] underline flex items-center gap-1">
+                <span>طلب الانضمام كعضو بالنادي متاح دائماً</span>
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+
+            <!-- Categories Tabs -->
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100" id="events-category-filters">
+              <button onclick="setEventCategory('all')" data-cat="all" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-black bg-[#1BA7A5] text-white border border-[#0E6160]">الكل</button>
+              <button onclick="setEventCategory('ورشة عمل')" data-cat="ورشة عمل" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-black bg-slate-100 text-slate-700 hover:bg-slate-200">ورش العمل</button>
+              <button onclick="setEventCategory('دورة تدريبية')" data-cat="دورة تدريبية" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-black bg-slate-100 text-slate-700 hover:bg-slate-200">الدورات التدريبية</button>
+              <button onclick="setEventCategory('هاكاثون')" data-cat="هاكاثون" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-black bg-slate-100 text-slate-700 hover:bg-slate-200">الهاكاثونات والمسابقات</button>
+              <button onclick="setEventCategory('محاضرة تقنية')" data-cat="محاضرة تقنية" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-black bg-slate-100 text-slate-700 hover:bg-slate-200">المحاضرات</button>
+            </div>
+          </div>
+
+          <!-- Events Grid -->
+          <div id="events-grid-full" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered by JS -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECTION: NEWS & ANNOUNCEMENTS ================= -->
+      <section id="tab-news" class="tab-content">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+          
+          <div class="bg-white p-6 rounded-2xl border-2 border-[#1BA7A5] shadow-teal-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 text-xs font-black text-[#D9A441]">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+                <span>المركز الإعلامي</span>
+              </div>
+              <h2 class="text-2xl font-black text-[#0E6160]">الأخبار، الإعلانات والتغطيات</h2>
+              <p class="text-xs font-semibold text-slate-600 mt-1">تابع إنجازات طلبة الكلية الجامعية بالليث والتقارير المصورة للأنشطة</p>
+            </div>
+          </div>
+
+          <div id="news-grid-full" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Populated via JS -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECTION: COMMITTEES ================= -->
+      <section id="tab-committees" class="tab-content">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+          
+          <div class="bg-white p-6 rounded-2xl border-2 border-[#1BA7A5] shadow-teal-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 text-xs font-black text-[#1BA7A5]">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                <span>الهيكل التنظيمي</span>
+              </div>
+              <h2 class="text-2xl font-black text-[#0E6160]">لجان نادي الهندسة والحاسبات</h2>
+              <p class="text-xs font-semibold text-slate-600 mt-1">تعرف على لجان النادي وفرق العمل التخصصية وكيفية الانضمام لها</p>
+            </div>
+            <div>
+              <a href="https://forms.office.com/r/CEClubJoin" target="_blank" rel="noopener noreferrer" class="bg-[#D9A441] hover:bg-[#B88528] text-white font-black text-xs px-5 py-2.5 rounded-xl border-2 border-[#B88528] shadow-gold-sm transition-all flex items-center gap-2">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+                <span>طلب الانضمام كعضو بالنادي (Microsoft Forms)</span>
+              </a>
+            </div>
+          </div>
+
+          <div id="committees-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Populated by JS -->
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#0E6160] text-white border-t-4 border-[#D9A441] mt-16 pt-12 pb-6 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto space-y-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          
+          <!-- Column 1: Brand Info -->
+          <div class="space-y-3 md:col-span-2">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#1BA7A5] border-2 border-[#D9A441] flex items-center justify-center">
+                <span class="text-white font-black text-lg font-mono">CE</span>
+              </div>
+              <div>
+                <h4 class="font-black text-base text-white">نادي الهندسة والحاسبات بالليث</h4>
+                <p class="text-xs text-[#FAECCF]">الكلية الجامعية بالليث - جامعة أم القرى</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed font-semibold max-w-md">
+              نادي طلابي تقني وهندسي يهدف لتطوير مهارات الطلبة في البرمجة والذكاء الاصطناعي والأمن السيبراني، وتمكينهم من تمثيل الجامعة في المحافل الوطنية والهاكاثونات.
+            </p>
+          </div>
+
+          <!-- Column 2: Quick Links -->
+          <div class="space-y-2">
+            <h5 class="font-black text-xs text-[#FAECCF] uppercase tracking-wider">روابط سريعة</h5>
+            <ul class="space-y-1.5 text-xs text-slate-200 font-semibold">
+              <li><button onclick="switchTab('events')" class="hover:text-[#1BA7A5]">الفعاليات والورش</button></li>
+              <li><button onclick="switchTab('committees')" class="hover:text-[#1BA7A5]">لجان النادي</button></li>
+              <li><button onclick="switchTab('news')" class="hover:text-[#1BA7A5]">المركز الإعلامي</button></li>
+              <li><a href="https://forms.office.com/r/CEClubJoin" target="_blank" rel="noopener noreferrer" class="hover:text-[#D9A441] text-[#FAECCF] flex items-center gap-1"><span>الانضمام كعضو بالنادي (Microsoft Forms)</span><i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Contact & Location -->
+          <div class="space-y-2 text-xs text-slate-200 font-semibold">
+            <h5 class="font-black text-xs text-[#FAECCF] uppercase tracking-wider">التواصل والمقر</h5>
+            <p>المملكة العربية السعودية - محافظة الليث</p>
+            <p>الكلية الجامعية بالليث - مبنى الهندسة والحاسبات</p>
+            <p class="text-[#FAECCF] font-mono">ceclub.leith@uqu.edu.sa</p>
+          </div>
+
+        </div>
+
+        <div class="border-t border-white/20 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-300 font-semibold gap-3">
+          <p>© 2026 نادي الهندسة والحاسبات بالليث - جامعة أم القرى. جميع الحقوق محفوظة.</p>
+          <p class="text-[#FAECCF]">صنع بشغف لخدمة طلبة جامعة أم القرى</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- Event Details Modal -->
+    <div id="event-details-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl border-2 border-[#1BA7A5] shadow-teal max-w-lg w-full overflow-hidden animate-fadeIn">
+        <div class="bg-[#0E6160] text-white p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i data-lucide="calendar" class="w-5 h-5 text-[#D9A441]"></i>
+            <h3 class="font-black text-sm sm:text-base">تفاصيل الفعالية</h3>
+          </div>
+          <button onclick="closeEventDetailsModal()" class="text-slate-300 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+
+        <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto" id="event-details-content">
+          <!-- Populated by JS -->
+        </div>
       </div>
     </div>
-  </dialog>
 
-  <script src="/app.js"></script>
-</body>
+    <!-- ================= MOBILE STICKY BOTTOM NAVIGATION BAR ================= -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t-2 border-[#1BA7A5]/40 shadow-2xl px-2 py-1.5 pb-safe flex items-center justify-around select-none">
+      
+      <!-- 1. Home -->
+      <button onclick="switchTab('home')" data-mobile-tab="home" class="mobile-nav-item flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[#0E6160] font-black text-[10px] min-w-[56px] min-h-[48px] transition-all">
+        <i data-lucide="sparkles" class="w-5 h-5 mb-0.5 text-[#1BA7A5]"></i>
+        <span>الرئيسية</span>
+      </button>
+
+      <!-- 2. Events -->
+      <button onclick="switchTab('events')" data-mobile-tab="events" class="mobile-nav-item flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-600 font-bold text-[10px] min-w-[56px] min-h-[48px] transition-all relative">
+        <i data-lucide="calendar" class="w-5 h-5 mb-0.5"></i>
+        <span>الفعاليات</span>
+      </button>
+
+      <!-- 3. Join Club via MS Forms (Center Floating Button) -->
+      <a href="https://forms.office.com/r/CEClubJoin" target="_blank" rel="noopener noreferrer" class="mobile-nav-item flex flex-col items-center justify-center -mt-4 bg-[#D9A441] text-white px-3 py-2 rounded-2xl border-2 border-[#B88528] shadow-gold font-black text-[10px] min-w-[62px] transition-all transform active:scale-95 text-center">
+        <i data-lucide="external-link" class="w-5 h-5 mb-0.5"></i>
+        <span>الانضمام</span>
+      </a>
+
+      <!-- 4. Committees -->
+      <button onclick="switchTab('committees')" data-mobile-tab="committees" class="mobile-nav-item flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-600 font-bold text-[10px] min-w-[56px] min-h-[48px] transition-all">
+        <i data-lucide="users" class="w-5 h-5 mb-0.5"></i>
+        <span>اللجان</span>
+      </button>
+
+      <!-- 5. News -->
+      <button onclick="switchTab('news')" data-mobile-tab="news" class="mobile-nav-item flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-600 font-bold text-[10px] min-w-[56px] min-h-[48px] transition-all">
+        <i data-lucide="bell" class="w-5 h-5 mb-0.5"></i>
+        <span>الأخبار</span>
+      </button>
+
+    </div>
+
+    <!-- MAIN APP JAVASCRIPT -->
+    <script src="/app.js"></script>
+  </body>
 </html>
